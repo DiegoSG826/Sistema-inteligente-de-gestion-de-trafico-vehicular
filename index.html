@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="description" content="Laboratorio privado de simulación de tráfico y semáforos en Ciudad de México.">
+  <meta name="theme-color" content="#f5f5f1">
+  <title>NODO · Laboratorio de movilidad CDMX</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/project.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="topbar">
+    <a class="brand" href="#simulador" aria-label="NODO, inicio"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>NODO<span>®</span></strong><span class="brand-description">Laboratorio de movilidad<br>Ciudad de México</span></a>
+    <div class="header-right"><span class="private-badge"><span aria-hidden="true">▣</span> Espacio privado</span><form action="/logout" method="post"><button class="logout" type="submit">Salir <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></span></button></form></div>
+  </header>
+  <main id="main">
+    <section class="page-intro">
+      <div><p class="eyebrow"><span class="tiny-dot"></span> SISTEMAS INTELIGENTES / PROTOTIPO 01</p><h1>Menos espera.<br><span>Mejores decisiones.</span></h1><p class="intro-copy">Explora cómo el tráfico transforma los tiempos de un semáforo.<br class="desktop-only"> Configura un escenario y compara dos formas de mover la ciudad.</p></div>
+      <div class="intro-note"><div class="coordinate-mark" aria-hidden="true">⊕</div><div><span class="eyebrow">19.4326° N &nbsp; 99.1332° O</span><strong>CDMX, en simulación.</strong><p>Datos sintéticos. Resultados para explorar,<br>no para operar semáforos reales.</p></div></div>
+    </section>
+    <div class="navigation-row"><nav aria-label="Secciones del laboratorio"><button class="tab active" data-view="simulador" aria-current="page"><span>01</span> Simulador</button><button class="tab" data-view="resultados"><span>02</span> Resultados</button><button class="tab" data-view="proyecto"><span>03</span> Proyecto</button><button class="tab" data-view="datos"><span>04</span> Datos y supuestos</button></nav><span class="data-status"><span class="tiny-dot"></span> Fuente: simulación reproducible</span></div>
+    <section id="view-simulador" class="view" aria-label="Simulador de tráfico">
+      <div class="simulation-layout">
+        <aside class="panel controls-panel">
+          <div class="panel-title"><span class="section-number">01 /</span><h2>Tu escenario</h2><button id="reset" class="icon-button" aria-label="Restablecer escenario" title="Restablecer">↺</button></div>
+          <div class="control-content">
+            <label class="field-label" for="corridor">Cruce de referencia</label><div class="select-wrap"><select id="corridor"><option value="reforma">Paseo de la Reforma × Insurgentes</option><option value="tlalpan">Calz. de Tlalpan × Eje 5 Sur</option><option value="universidad">Av. Universidad × División del Norte</option></select></div><p class="field-help">Ubicación ilustrativa. Cruce simplificado de dos ejes.</p>
+            <fieldset class="presets"><legend>Nivel de tráfico <span>ESCENARIO</span></legend><div class="segmented"><button data-preset="light">Ligero</button><button data-preset="medium" class="selected" aria-pressed="true">Medio</button><button data-preset="heavy">Intenso</button></div></fieldset>
+            <div class="control-block"><div class="label-value"><label for="demandNS">Demanda norte–sur</label><output id="demandNS-value" for="demandNS">1,100 <small>veh/h</small></output></div><input type="range" id="demandNS" min="0" max="2400" step="50" value="1100"><div class="range-ends"><span>0</span><span>2,400 veh/h</span></div></div>
+            <div class="control-block"><div class="label-value"><label for="demandEW">Demanda oriente–poniente</label><output id="demandEW-value" for="demandEW">650 <small>veh/h</small></output></div><input type="range" id="demandEW" min="0" max="2400" step="50" value="650"><div class="range-ends"><span>0</span><span>2,400 veh/h</span></div></div>
+            <div class="control-divider"></div><div class="control-heading"><h3>Plan fijo de referencia</h3><span class="info-tip" title="La estrategia adaptativa conserva la duración del ciclo y redistribuye el tiempo verde.">i</span></div>
+            <div class="number-grid"><label for="greenNS">Verde norte–sur<div class="number-input"><input id="greenNS" type="number" min="15" max="75" step="1" value="45"><span>s</span></div></label><label for="greenEW">Verde oriente–poniente<div class="number-input"><input id="greenEW" type="number" min="15" max="75" step="1" value="35"><span>s</span></div></label></div>
+            <div class="cycle-summary"><span>Ciclo completo <strong id="cycle-length">90 s</strong></span><small>Incluye dos despejes de 5 s.</small></div>
+            <details class="advanced"><summary>Opciones de simulación <span>+</span></summary><div class="number-grid"><label for="duration">Horizonte (min)<div class="number-input"><input id="duration" type="number" min="1" max="120" value="15"><span>min</span></div></label><label for="seed">Semilla aleatoria<div class="number-input"><input id="seed" type="number" min="0" max="4294967295" step="1" value="42"></div></label></div><p class="field-help">Despeje: 5 s de todo rojo por fase. Ámbar no modelado. Un carril equivalente por eje, capacidad 1,800 veh/h en verde. Adaptativo: verdes de 15–75 s.</p></details>
+            <p id="config-error" class="form-error" role="alert" hidden></p>
+            <button id="simulate" class="primary-button"><span aria-hidden="true"><svg class="play-icon" viewBox="0 0 16 16"><path d="m5 3 8 5-8 5Z"/></svg></span> Simular y comparar <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></span></button><p class="reproducible">Misma demanda. Misma semilla. Dos estrategias.</p>
+          </div>
+        </aside>
+        <div class="simulation-main">
+          <section class="panel map-panel" aria-label="Visualización ilustrativa del cruce">
+            <div class="map-header"><div><span class="eyebrow">VISTA DEL CRUCE</span><h2 id="map-title">Reforma × Insurgentes</h2></div><span class="simulation-tag">SIMULADO</span></div>
+            <div class="map-stage">
+              <svg id="junction" viewBox="0 0 760 360" role="img" aria-labelledby="map-svg-title map-svg-description"><title id="map-svg-title">Cruce esquemático de dos ejes en CDMX</title><desc id="map-svg-description">Representación ilustrativa de tráfico norte-sur y oriente-poniente; no es un mapa geográfico ni muestra vehículos reales.</desc><defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#e6e9e1" stroke-width="0.6"/></pattern><pattern id="walk-x" width="8" height="12" patternUnits="userSpaceOnUse"><rect width="4" height="12" fill="#fff" opacity=".8"/></pattern><pattern id="walk-y" width="12" height="8" patternUnits="userSpaceOnUse"><rect width="12" height="4" fill="#fff" opacity=".8"/></pattern></defs>
+                <rect width="760" height="360" fill="#eef0e9"/><rect width="760" height="360" fill="url(#grid)"/>
+                <g class="city-blocks"><rect x="25" y="28" width="122" height="62" rx="10"/><rect x="163" y="28" width="117" height="62" rx="10"/><rect x="25" y="105" width="75" height="28" rx="7"/><rect x="112" y="105" width="168" height="28" rx="7"/><rect x="481" y="26" width="87" height="107" rx="10"/><rect x="583" y="26" width="147" height="48" rx="10"/><rect x="583" y="86" width="147" height="47" rx="10"/><rect x="25" y="238" width="104" height="94" rx="10"/><rect x="144" y="238" width="136" height="40" rx="8"/><rect x="144" y="291" width="136" height="41" rx="8"/><rect x="481" y="238" width="142" height="95" rx="10"/><rect x="637" y="238" width="93" height="95" rx="10"/></g>
+                <g fill="#d0dbc8"><circle cx="45" cy="118" r="7"/><circle cx="68" cy="118" r="7"/><circle cx="510" cy="65" r="9"/><circle cx="539" cy="92" r="12"/><circle cx="537" cy="50" r="9"/><circle cx="667" cy="268" r="11"/><circle cx="697" cy="295" r="14"/><circle cx="666" cy="313" r="9"/></g>
+                <path d="M0 185H760M380 0V360" stroke="#d1d6d0" stroke-width="104"/><path d="M0 185H760M380 0V360" stroke="#fafbf8" stroke-width="92"/><path d="M0 185H760M380 0V360" stroke="#e3e6df" stroke-width="1.5" stroke-dasharray="8 7"/>
+                <g stroke="#e3e6df" stroke-width="1" stroke-dasharray="6 7"><path d="M0 162H330M0 208H330M430 162H760M430 208H760M357 0V135M403 0V135M357 235V360M403 235V360"/></g>
+                <rect x="313" y="139" width="12" height="92" fill="url(#walk-y)"/><rect x="435" y="139" width="12" height="92" fill="url(#walk-y)"/><rect x="334" y="119" width="92" height="12" fill="url(#walk-x)"/><rect x="334" y="239" width="92" height="12" fill="url(#walk-x)"/>
+                <g class="map-road-label" fill="#929b91" font-size="9" letter-spacing="2"><text x="80" y="177">EJE ORIENTE–PONIENTE</text><text x="510" y="177">EJE ORIENTE–PONIENTE</text><text transform="translate(373 110) rotate(-90)">NORTE–SUR</text></g>
+                <g id="car-layer"></g><g id="signals"><circle id="signal-ns" cx="319" cy="121" r="9" stroke="white" stroke-width="4"/><circle id="signal-ew" cx="437" cy="245" r="9" stroke="white" stroke-width="4"/></g>
+                <g transform="translate(697 27)" fill="#526657"><text x="0" y="0" font-size="11" text-anchor="middle">N</text><path d="M0 6L-4 22L0 18L4 22Z"/></g>
+                <g transform="translate(29 304)"><rect width="127" height="34" rx="17" fill="white" stroke="#dbe0d6"/><circle cx="16" cy="17" r="4" fill="#e7773b"/><text x="29" y="21" font-size="10" fill="#526657">Cruce ilustrativo · CDMX</text></g>
+              </svg>
+              <div class="map-card"><span class="eyebrow">FASE ACTUAL · ADAPTATIVA</span><strong id="phase-label">Norte–sur en verde</strong><div class="map-card-line"><span><i class="legend-dot green"></i>NS <b id="map-green-ns">45 s</b></span><span><i class="legend-dot orange"></i>OP <b id="map-green-ew">35 s</b></span></div></div>
+            </div>
+            <div class="playback-bar"><button id="playback" class="play-button" aria-label="Pausar animación" aria-pressed="true">Ⅱ</button><div><strong>Recorrido de la simulación</strong><span id="playback-time">00:00 / 15:00</span></div><input id="timeline" aria-label="Tiempo de la simulación" type="range" min="0" max="900" value="0" step="1"><select id="speed" aria-label="Velocidad de reproducción"><option value="1">1×</option><option value="5" selected>5×</option><option value="15">15×</option></select></div>
+          </section>
+          <div class="metrics-grid" id="metrics" aria-live="polite"></div>
+          <section class="panel quick-comparison"><div class="chart-heading"><div><span class="eyebrow">EL EFECTO DE CADA DECISIÓN</span><h2>Vehículos en espera</h2></div><div class="chart-legend"><span><i class="legend-line fixed"></i>Fijo</span><span><i class="legend-line adaptive"></i>Adaptativo</span></div></div><div id="queue-chart" class="line-chart"></div><div class="chart-bottom"><span>Mismas llegadas en ambos escenarios · <b id="chart-horizon">15 min</b></span><button class="text-button" data-go="resultados">Ver comparación completa <span aria-hidden="true"><svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></span></button></div></section>
+        </div>
+      </div>
+      <div class="scenario-notice"><span aria-hidden="true">ⓘ</span><p id="scenario-notice">El controlador adaptativo redistribuye los verdes al inicio de cada ciclo. La mejora depende del escenario; un cruce saturado puede seguir acumulando vehículos.</p><button class="text-button" data-go="datos">Ver supuestos <svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M4 4h8v8"/></svg></button></div>
+    </section>
+    <section id="view-resultados" class="view" aria-label="Comparación de resultados" hidden></section>
+    <section id="view-proyecto" class="view" aria-label="Planificación del proyecto" hidden></section>
+    <section id="view-datos" class="view" aria-label="Datos y supuestos" hidden></section>
+  </main>
+  <footer><a class="footer-brand" href="#simulador">NODO<span>®</span></a><p>Una ciudad compleja. Un espacio para entenderla.</p><span>Prototipo académico · Sin conexión a semáforos ni a Waze</span></footer>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

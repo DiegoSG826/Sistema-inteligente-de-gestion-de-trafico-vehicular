@@ -1,0 +1,13 @@
+.git
+node_modules
+tests
+docs
+scripts
+*.log
+*.pem
+*.key
+.env*
+auth*.json
+playwright-report
+test-results
+coverage
